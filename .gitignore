@@ -1,0 +1,7 @@
+# ide
+.idea
+
+# terraform
+.terraform
+tf-plan*
+*.tfstate
