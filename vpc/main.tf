@@ -1,4 +1,10 @@
 #./vpc
+provider "aws" {
+  version = "2.46.0"
+  region = "us-east-1"
+  profile = "terraform-test"
+}
+
 data "aws_caller_identity" "current" { }
 
 data "aws_availability_zones" "azs" {
