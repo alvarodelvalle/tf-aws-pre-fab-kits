@@ -27,7 +27,7 @@ variable "dhcp_options_enabled" {
 }
 
 variable "dhcp_options_domain_name_servers" {
-  default = ""
+  default = [""]
   type = list(string)
 }
 
