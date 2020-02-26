@@ -5,14 +5,6 @@ variable "name" {
   description = "The name of the VPC"
 }
 
-variable "timezone" {
-  description = "The Timezone for registering GitLab runners eg America/New_York"
-}
-
-variable "vpc_id" {
-  description = "The AWS VPC ID"
-}
-
 variable "provider_region" {
   description = "The AWS region eg: us-east-1 for the provider block"
 }
