@@ -36,7 +36,7 @@ module "vpc" {
   redshift_subnets    = ["10.10.41.0/24", "10.10.42.0/24", "10.10.43.0/24"]
   intra_subnets       = ["10.10.51.0/24", "10.10.52.0/24", "10.10.53.0/24"]
 
-  create_database_subnet_group = false
+  create_database_subnet_group = var.create_database_subnet_group
 
   enable_nat_gateway = var.enable_nat_gateway
   single_nat_gateway = var.single_nat_gateway #single shared NAT Gateway across all of your private networks
