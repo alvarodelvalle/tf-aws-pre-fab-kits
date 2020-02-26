@@ -1,9 +1,5 @@
 #./vpc
-provider "aws" {
-  version = var.provider_version
-  region = var.provider_region
-  profile = var.aws_profile
-}
+provider "aws" {}
 
 terraform {
   backend "s3" {}
