@@ -5,6 +5,10 @@ provider "aws" {
   profile = var.aws_profile
 }
 
+terraform {
+  backend "s3" {}
+}
+
 data "aws_caller_identity" "current" { }
 
 data "aws_availability_zones" "azs" {

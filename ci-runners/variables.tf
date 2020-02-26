@@ -46,11 +46,6 @@ variable "gitlab_group" {
     description = "Group of projects in GitLab"
 }
 
-variable "backend_bucket" {}
-
-variable "backend_key" {}
-
-variable "backend_region" {}
 # ---------------------------------------------------------------------------------------------------------------------
 # With Defaults
 # ---------------------------------------------------------------------------------------------------------------------
