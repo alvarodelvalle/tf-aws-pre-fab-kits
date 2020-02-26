@@ -1,8 +1,8 @@
 #./vpc
 provider "aws" {
-  version = "2.46.0"
-  region = "us-east-1"
-  profile = "terraform-test"
+  version = var.provider_version
+  region = var.provider_region
+  profile = var.aws_profile
 }
 
 data "aws_caller_identity" "current" { }
@@ -18,10 +18,10 @@ module "vpc" {
   name = var.name
   cidr = "10.10.0.0/16"
 
-  enable_dhcp_options              = true
+  enable_dhcp_options              = var.dhcp_options_enabled
   #Specifies DNS name for DHCP options set (requires enable_dhcp_options set to true)
-  dhcp_options_domain_name         = "service.consul" #register a service - consul requirement
-  dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
+  dhcp_options_domain_name         = var.dhcp_options_domain_name #register a service - consul requirement
+  dhcp_options_domain_name_servers = [var.dhcp_options_domain_name_servers]
 
   azs                 = [data.aws_availability_zones.azs.names[0], data.aws_availability_zones.azs.names[1],
                          data.aws_availability_zones.azs.names[2]]
@@ -34,17 +34,14 @@ module "vpc" {
 
   create_database_subnet_group = false
 
-  enable_nat_gateway = true
-  single_nat_gateway = true #single shared NAT Gateway across all of your private networks
+  enable_nat_gateway = var.enable_nat_gateway
+  single_nat_gateway = var.single_nat_gateway #single shared NAT Gateway across all of your private networks
+  one_nat_gateway_per_az = var.one_nat_gateway_per_az
 
-  enable_vpn_gateway = true
+  enable_vpn_gateway = var.enable_vpn_gateway
 
-  enable_s3_endpoint       = true
-  enable_dynamodb_endpoint = true
+  enable_s3_endpoint       = var.enable_s3_endpoint
+  enable_dynamodb_endpoint = var.enable_dynamodb_endpoint
 
-  tags = {
-    Owner       = data.aws_caller_identity.current.account_id
-    Environment = "ops"
-    Name        = "n-stack-ops" #'vpcname-owner
-  }
+  tags = var.tags
 }

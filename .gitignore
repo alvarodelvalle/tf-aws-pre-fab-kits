@@ -2,6 +2,6 @@
 .idea
 
 # terraform
-.terraform
+**.terraform
 tf-plan*
 *.tfstate

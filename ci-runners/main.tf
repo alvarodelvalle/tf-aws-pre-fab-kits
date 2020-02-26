@@ -1,12 +1,26 @@
 #./ci-runners/main.tf
+provider "aws" {
+  version = var.provider_version
+  region = var.provider_region
+  profile = var.aws_profile
+}
+
+terraform {
+  backend "s3" {
+    bucket = var.backend_bucket
+    key    = var.backend_key
+    region = var.backend_region
+  }
+}
+
 module "gitlab-runner" {
     source  = "npalm/gitlab-runner/aws"
     version = "4.10.0"
 
-  aws_region  = "us-east-1"
-  environment = "ops"
+  aws_region  = var.region
+  environment = var.environment
 
-  runners_name             = "group-yaka2020-runners"
+  runners_name             = var.runners_name
   enable_runner_ssm_access = true
   enable_eip               = true
 
@@ -14,7 +28,7 @@ module "gitlab-runner" {
   subnet_id_runners             = element(var.private_subnets, 0)
   subnet_ids_gitlab_runner      = var.private_subnets
   docker_machine_instance_type  = "m5a.large"
-  docker_machine_spot_price_bid = "0.04"
+  docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
 
   runners_gitlab_url                = "https://gitlab.com/"
   runners_token                     = var.registration_token
@@ -28,14 +42,14 @@ module "gitlab-runner" {
   }
 
   tags = {
-    "Name"                                   = "ci-group-yaka2020-runners"
-    "tf-aws-gitlab-runner:group"             = "group-yaka2020-runners"
+    "Name"                                   = "gid-gitlab-${var.gitlab_group}-runner"
+    "tf-aws-gitlab-runner:group"             = var.gitlab_group
     "tf-aws-gitlab-runner:instancelifecycle" = "spot:yes"
   }
 
   runners_off_peak_timezone   = var.timezone
   runners_off_peak_periods    = "[\"* * 0-7,20-23 * * mon-sun *\"]"
-  runners_off_peak_idle_count = 0
+  runners_off_peak_idle_count = 1
   runners_off_peak_idle_time  = 60
 
   runners_privileged         = "true"
