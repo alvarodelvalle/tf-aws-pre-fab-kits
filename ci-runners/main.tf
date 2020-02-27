@@ -1,6 +1,4 @@
 #./ci-runners/main.tf
-provider "aws" {}
-
 terraform {
   backend "s3" {}
 }
@@ -16,9 +14,9 @@ module "gitlab-runner" {
   enable_runner_ssm_access = true
   enable_eip               = true
 
-  vpc_id                        = var.vpc_id
-  subnet_id_runners             = element(var.private_subnets, 0)
-  subnet_ids_gitlab_runner      = var.private_subnets
+  vpc_id                        = data.terraform_remote_state.vpc.outputs.vpc_id
+  subnet_id_runners             = element(data.terraform_remote_state.vpc.outputs.private_subnets, 0)
+  subnet_ids_gitlab_runner      = data.terraform_remote_state.vpc.outputs.private_subnets
   docker_machine_instance_type  = "m5a.large"
   docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
 
