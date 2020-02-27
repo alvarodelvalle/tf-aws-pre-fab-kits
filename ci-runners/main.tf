@@ -17,6 +17,7 @@ module "gitlab-runner" {
   vpc_id                        = data.terraform_remote_state.vpc.outputs.vpc_id
   subnet_id_runners             = element(data.terraform_remote_state.vpc.outputs.public_subnets, 0)
   subnet_ids_gitlab_runner      = data.terraform_remote_state.vpc.outputs.public_subnets
+  runners_executor = "docker"
   docker_machine_instance_type  = "m5a.large"
   docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
 
@@ -24,9 +25,9 @@ module "gitlab-runner" {
   runners_token                     = var.registration_token
   gitlab_runner_registration_config = {
     registration_token = var.registration_token
-    tag_list           = "docker_spot_runner"
+    tag_list           = "docker_runner"
     description        = "runner default - auto"
-    locked_to_project  = "false"
+    locked_to_project  = "true"
     run_untagged       = "true"
     maximum_timeout    = "3600"
   }
