@@ -19,7 +19,7 @@ module "vpc" {
   enable_dhcp_options              = var.dhcp_options_enabled
   #Specifies DNS name for DHCP options set (requires enable_dhcp_options set to true)
   dhcp_options_domain_name         = var.dhcp_options_domain_name #register a service - consul requirement
-  dhcp_options_domain_name_servers = [var.dhcp_options_domain_name_servers]
+  dhcp_options_domain_name_servers = var.dhcp_options_domain_name_servers
 
   azs                 = [data.aws_availability_zones.azs.names[0], data.aws_availability_zones.azs.names[1],
                          data.aws_availability_zones.azs.names[2]]
