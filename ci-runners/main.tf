@@ -31,7 +31,9 @@ module "gitlab-runner" {
   }
 
   tags = {
-    "tf-aws-gitlab-runner:example"           = "runner-default"
+    "Name"                                   = var.runners_name
+    "Environment"                            = var.environment
+    "tf-aws-gitlab-runner:executor"          = "docker-machine"
     "tf-aws-gitlab-runner:instancelifecycle" = "spot:yes"
   }
 
