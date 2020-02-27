@@ -10,26 +10,6 @@ variable "timezone" {
     description = "The Timezone for registering GitLab runners eg America/New_York"
 }
 
-variable "vpc_id" {
-    description = "The AWS VPC ID"
-}
-
-variable "private_subnets" {
-    description = "The VPC private subnets in which to host runners"
-}
-
-variable "provider_region" {
-    description = "The AWS region eg: us-east-1 for the provider block"
-}
-
-variable "provider_version" {
-    description = "The AWS provider version to use eg: 2.47.0"
-}
-
-variable "aws_profile" {
-    description = "The credential profile to use to call AWS API's"
-}
-
 variable "region" {
     description = "The region to deploy to"
 }
