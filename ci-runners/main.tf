@@ -23,10 +23,10 @@ module "gitlab-runner" {
 
   gitlab_runner_registration_config = {
     registration_token = var.registration_token
-    tag_list           = "docker_spot_runner"
+    tag_list           = "docker_spot_runner, gid-group-runner"
     description        = "runner default - auto"
     locked_to_project  = "false"
-    run_untagged       = "true"
+    run_untagged       = "false"
     maximum_timeout    = "3600"
   }
 
