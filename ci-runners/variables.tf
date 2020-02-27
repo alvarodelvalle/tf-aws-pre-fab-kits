@@ -35,6 +35,11 @@ variable "docker_machine_spot_price_bid" {
     default     = "0.06"
 }
 
+variable "gitlab_url" {
+    description = "URL of the gitlab instance to connect to."
+    type        = string
+    default     = "https://gitlab.com"
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # Locals
 # ---------------------------------------------------------------------------------------------------------------------
