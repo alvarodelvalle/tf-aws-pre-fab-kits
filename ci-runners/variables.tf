@@ -40,6 +40,12 @@ variable "gitlab_url" {
     type        = string
     default     = "https://gitlab.com"
 }
+
+variable "gitlab_runner_tag_list" {
+    description = "The gitlab runners' tags as defined by 'tags:' in pipeline config"
+    type = list(string)
+    default = "gid-group-runner"
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # Locals
 # ---------------------------------------------------------------------------------------------------------------------
