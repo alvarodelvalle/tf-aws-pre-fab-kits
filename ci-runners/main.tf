@@ -4,8 +4,8 @@ terraform {
 }
 
 module "gitlab-runner" {
-    source  = "npalm/gitlab-runner/aws"
-    version = "4.11.1"
+    source  = "github.com/alvarodelvalle/terraform-aws-gitlab-runner.git"
+//    version = "4.11.1"
 
   aws_region  = var.region
   environment = var.environment
