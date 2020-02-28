@@ -43,8 +43,8 @@ variable "gitlab_url" {
 
 variable "gitlab_runner_tag_list" {
     description = "The gitlab runners' tags as defined by 'tags:' in pipeline config"
-    type = list(string)
-    default = "gid-group-runner"
+    type = string
+    default = "gid-group-runner, docker-spot-runner"
 }
 # ---------------------------------------------------------------------------------------------------------------------
 # Locals
