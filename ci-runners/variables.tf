@@ -52,7 +52,7 @@ variable "gitlab_cache_bucket" {
 }
 
 variable "create_cache_bucket" {
-    default = true
+    default = false
 }
 # ---------------------------------------------------------------------------------------------------------------------
 # Locals
