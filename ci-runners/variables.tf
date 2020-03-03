@@ -47,15 +47,12 @@ variable "gitlab_runner_tag_list" {
     default = "gid-group-runner, docker-spot-runner"
 }
 
-variable "cache_bucket" {
-    description = "Configuration to control the creation of the cache bucket. By default the bucket will be created and used as shared cache. To use the same cache across multiple runners disable the creation of the cache and provide a policy and bucket name. See the public runner example for more details."
-    type        = map
+variable "gitlab_cache_bucket" {
+    default = ""
+}
 
-    default = {
-        create = true
-        policy = ""
-        bucket = ""
-    }
+variable "create_cache_bucket" {
+    default = true
 }
 # ---------------------------------------------------------------------------------------------------------------------
 # Locals

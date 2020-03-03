@@ -3,6 +3,18 @@ terraform {
   backend "s3" {}
 }
 
+data "aws_s3_bucket" "gitlab_cache" {
+  bucket = var.gitlab_cache_bucket
+}
+
+data "template_file" "docker_machine_cache_policy" {
+  template = file("${path.module}/policies/cache.json")
+
+  vars = {
+    s3_cache_arn = data.aws_s3_bucket.gitlab_cache.arn
+  }
+}
+
 module "gitlab-runner" {
     source  = "github.com/alvarodelvalle/terraform-aws-gitlab-runner.git"
 //    version = "4.11.1"
@@ -10,7 +22,11 @@ module "gitlab-runner" {
   aws_region  = var.region
   environment = var.environment
 
-  cache_bucket = var.cache_bucket
+  cache_bucket = {
+    create = var.create_cache_bucket
+    policy = data.template_file.docker_machine_cache_policy
+    bucket = var.gitlab_cache_bucket
+  }
 
   vpc_id                   = data.terraform_remote_state.vpc.outputs.vpc_id
   subnet_ids_gitlab_runner = data.terraform_remote_state.vpc.outputs.private_subnets
