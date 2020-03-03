@@ -10,6 +10,8 @@ module "gitlab-runner" {
   aws_region  = var.region
   environment = var.environment
 
+  cache_bucket = var.cache_bucket
+
   vpc_id                   = data.terraform_remote_state.vpc.outputs.vpc_id
   subnet_ids_gitlab_runner = data.terraform_remote_state.vpc.outputs.private_subnets
   subnet_id_runners        = element(data.terraform_remote_state.vpc.outputs.private_subnets, 0)

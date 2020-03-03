@@ -26,6 +26,9 @@ variable "gitlab_group" {
     description = "Group of projects in GitLab"
 }
 
+variable "cache_bucket" {
+    description = "The cache location for runners to use"
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # With Defaults
 # ---------------------------------------------------------------------------------------------------------------------
