@@ -26,9 +26,6 @@ variable "gitlab_group" {
     description = "Group of projects in GitLab"
 }
 
-variable "cache_bucket" {
-    description = "The cache location for runners to use"
-}
 # ---------------------------------------------------------------------------------------------------------------------
 # With Defaults
 # ---------------------------------------------------------------------------------------------------------------------
@@ -48,6 +45,17 @@ variable "gitlab_runner_tag_list" {
     description = "The gitlab runners' tags as defined by 'tags:' in pipeline config"
     type = string
     default = "gid-group-runner, docker-spot-runner"
+}
+
+variable "cache_bucket" {
+    description = "Configuration to control the creation of the cache bucket. By default the bucket will be created and used as shared cache. To use the same cache across multiple runners disable the creation of the cache and provide a policy and bucket name. See the public runner example for more details."
+    type        = map
+
+    default = {
+        create = true
+        policy = ""
+        bucket = ""
+    }
 }
 # ---------------------------------------------------------------------------------------------------------------------
 # Locals
