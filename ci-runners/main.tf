@@ -24,7 +24,7 @@ module "gitlab-runner" {
 
   cache_bucket = {
     create = var.create_cache_bucket
-    policy = concat(aws_iam_policy.docker_machine_cache.*.arn, [""])[0]
+    policy = concat(aws_iam_policy.docker_machine_cache_access.*.arn, [""])[0]
     bucket = var.gitlab_cache_bucket
   }
 
