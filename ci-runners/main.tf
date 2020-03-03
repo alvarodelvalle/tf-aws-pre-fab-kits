@@ -24,7 +24,7 @@ module "gitlab-runner" {
 
   cache_bucket = {
     create = var.create_cache_bucket
-    policy = data.template_file.docker_machine_cache_policy
+    policy = element(concat(aws_iam_policy.docker_machine_cache.*.arn, [""]), 0)
     bucket = var.gitlab_cache_bucket
   }
 
@@ -80,4 +80,14 @@ resource "aws_iam_service_linked_role" "spot" {
 resource "aws_iam_service_linked_role" "autoscaling" {
   aws_service_name = "autoscaling.amazonaws.com"
   custom_suffix = "tf-ci"
+}
+
+resource "aws_iam_policy" "docker_machine_cache" {
+  count = var.create_cache_bucket ? 1 : 0
+
+  name        = "${var.environment}-docker-machine-cache"
+  path        = "/"
+  description = "Policy for docker machine instance to access cache"
+
+  policy = data.template_file.docker_machine_cache_policy.rendered
 }
