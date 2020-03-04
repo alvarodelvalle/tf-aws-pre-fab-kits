@@ -55,6 +55,7 @@ module "gitlab-runner" {
     "tf-aws-gitlab-runner:instancelifecycle" = "spot:yes"
   }
 
+  runners_idle_count = var.runners_idle_count
   runners_off_peak_timezone   = var.timezone
   runners_off_peak_idle_count = 0
   runners_off_peak_idle_time  = 60

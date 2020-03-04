@@ -26,6 +26,10 @@ variable "gitlab_group" {
     description = "Group of projects in GitLab"
 }
 
+variable "runners_idle_count" {
+    description = "The number of active runners during non-off peak time"
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # With Defaults
 # ---------------------------------------------------------------------------------------------------------------------
