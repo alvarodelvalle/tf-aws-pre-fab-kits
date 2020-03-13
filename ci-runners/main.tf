@@ -37,7 +37,8 @@ module "gitlab-runner" {
   enable_runner_ssm_access = true
   enable_eip               = true
 
-  docker_machine_spot_price_bid = "0.06"
+  docker_machine_instance_type = var.docker_machine_instance_type
+  docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
 
   gitlab_runner_registration_config = {
     registration_token = var.registration_token
