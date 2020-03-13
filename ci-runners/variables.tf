@@ -35,13 +35,13 @@ variable "runners_idle_count" {
 # ---------------------------------------------------------------------------------------------------------------------
 variable "docker_machine_instance_type"{
     description = "The instance type to run ci builds"
-    default = "a1.large"
+    default = "t3a.medium"
 }
 
 variable "docker_machine_spot_price_bid" {
     description = "Spot price bid; default is set to most recent on-demand price"
     type        = string
-    default     = "0.05"
+    default     = "0.03"
 }
 
 variable "gitlab_url" {
