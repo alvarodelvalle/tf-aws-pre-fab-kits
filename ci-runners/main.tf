@@ -15,6 +15,10 @@ data "template_file" "docker_machine_cache_policy" {
   }
 }
 
+data "template_file" "docker_machine_role" {
+  template = file("${path.module}/policies/docker-machine-role.json")
+}
+
 module "gitlab-runner" {
     source  = "github.com/alvarodelvalle/terraform-aws-gitlab-runner.git"
 //    version = "4.11.1"
@@ -39,6 +43,7 @@ module "gitlab-runner" {
 
   docker_machine_instance_type = var.docker_machine_instance_type
   docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
+  docker_machine_role_json = data.template_file.docker_machine_role.rendered
 
   gitlab_runner_registration_config = {
     registration_token = var.registration_token
