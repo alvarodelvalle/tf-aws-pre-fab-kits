@@ -77,7 +77,7 @@ module "gitlab-runner" {
     { "/var/lib/mysql" = "rw,noexec" },
   ]
   # working 9 to 5 :)
-  runners_off_peak_periods = "[\"* * 0-9,17-23 * * mon-fri *\", \"* * * * * sat,sun *\"]"
+  runners_off_peak_periods = var.runners_off_peak_periods
 }
 
 resource "aws_iam_service_linked_role" "spot" {
