@@ -7,7 +7,7 @@ data "aws_s3_bucket" "gitlab_cache" {
   bucket = var.gitlab_cache_bucket
 }
 
-data "template_file" "docker_machine_cache_policy" {
+data "template_file" "docker_cache_policy" {
   template = file("${path.module}/policies/cache.json")
 
   vars = {
@@ -15,9 +15,9 @@ data "template_file" "docker_machine_cache_policy" {
   }
 }
 
-data "template_file" "docker_machine_role" {
-  template = file("${path.module}/policies/docker-machine-role.json")
-}
+//data "template_file" "docker_machine_role" {
+//  template = file("${path.module}/policies/docker-machine-role.json")
+//}
 
 module "gitlab-runner" {
     source  = "github.com/alvarodelvalle/terraform-aws-gitlab-runner.git"
@@ -28,7 +28,7 @@ module "gitlab-runner" {
 
   cache_bucket = {
     create = var.create_cache_bucket
-    policy = concat(aws_iam_policy.docker_machine_cache_access.*.arn, [""])[0]
+    policy = concat(aws_iam_policy.docker_cache_access.*.arn, [""])[0]
     bucket = var.gitlab_cache_bucket
   }
 
@@ -40,10 +40,10 @@ module "gitlab-runner" {
   runners_gitlab_url       = var.gitlab_url
   enable_runner_ssm_access = true
   enable_eip               = true
-
-  docker_machine_instance_type = var.docker_machine_instance_type
-  docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
-  docker_machine_role_json = data.template_file.docker_machine_role.rendered
+  runners_executor         = "docker"
+//  docker_machine_instance_type = var.docker_machine_instance_type
+//  docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
+//  docker_machine_role_json = data.template_file.docker_machine_role.rendered
 
   gitlab_runner_registration_config = {
     registration_token = var.registration_token
@@ -57,8 +57,8 @@ module "gitlab-runner" {
   tags = {
     "Name"                                   = var.runners_name
     "Environment"                            = var.environment
-    "tf-aws-gitlab-runner:executor"          = "docker-machine"
-    "tf-aws-gitlab-runner:instancelifecycle" = "spot:yes"
+    "tf-aws-gitlab-runner:executor"          = "docker"
+    "tf-aws-gitlab-runner:instancelifecycle" = "spot:no"
   }
 
   runners_idle_count = var.runners_idle_count
@@ -76,23 +76,23 @@ module "gitlab-runner" {
   runners_services_volumes_tmpfs = [
     { "/var/lib/mysql" = "rw,noexec" },
   ]
-  # working 9 to 5 :)
+
   runners_off_peak_periods = var.runners_off_peak_periods
 }
 
-resource "aws_iam_service_linked_role" "spot" {
+resource "aws_iam_service_linked_role" "ci-runner-role" {
   aws_service_name = "spot.amazonaws.com"
 }
 
-resource "aws_iam_service_linked_role" "autoscaling" {
-  aws_service_name = "autoscaling.amazonaws.com"
-  custom_suffix = "tf-ci"
-}
+//resource "aws_iam_service_linked_role" "autoscaling" {
+//  aws_service_name = "autoscaling.amazonaws.com"
+//  custom_suffix = "tf-ci"
+//}
 
-resource "aws_iam_policy" "docker_machine_cache_access" {
+resource "aws_iam_policy" "docker_cache_access" {
   count = var.create_cache_bucket ? 0 : 1
 
-  name        = "${var.environment}-docker-machine-cache"
+  name        = "${var.environment}-docker-cache"
   path        = "/"
   description = "Policy for docker machine instance to access cache"
 
