@@ -22,7 +22,6 @@ data "template_file" "docker_cache_policy" {
 module "gitlab-runner" {
     source  = "github.com/alvarodelvalle/terraform-aws-gitlab-runner.git"
 //    version = "4.11.1"
-
   aws_region  = var.region
   environment = var.environment
 
@@ -36,12 +35,24 @@ module "gitlab-runner" {
   subnet_ids_gitlab_runner = data.terraform_remote_state.vpc.outputs.private_subnets
   subnet_id_runners        = element(data.terraform_remote_state.vpc.outputs.private_subnets, 0)
 
-  runners_name             = var.runners_name
-  runners_gitlab_url       = var.gitlab_url
-  enable_runner_ssm_access = true
-  enable_eip               = true
-  runners_executor         = "docker"
-//  docker_machine_instance_type = var.docker_machine_instance_type
+  gitlab_runner_version         = "12.9.0"
+  runners_name                  = var.runners_name
+  runners_gitlab_url            = var.gitlab_url
+  enable_runner_ssm_access      = true
+  enable_eip                    = true
+  runners_executor              = "docker"
+  runners_idle_count            = var.runners_idle_count
+  runners_off_peak_timezone     = var.timezone
+  runners_off_peak_idle_count   = 0
+  runners_off_peak_idle_time    = 60
+  runners_request_spot_instance = false
+  runners_privileged            = "true"
+  runners_additional_volumes    = ["/certs/client"]
+  runners_environment_vars      = ["AWS_REGION=us-east-1", "credsStore=ecr-login", "AWS_SDK_LOAD_CONFIG=true"]
+  runners_off_peak_periods      = var.runners_off_peak_periods
+  userdata_post_install         = "sudo yum install -y amazon-ecr-credential-helper"
+
+  //  docker_machine_instance_type = var.docker_machine_instance_type
 //  docker_machine_spot_price_bid = var.docker_machine_spot_price_bid
 //  docker_machine_role_json = data.template_file.docker_machine_role.rendered
 
@@ -61,14 +72,6 @@ module "gitlab-runner" {
     "tf-aws-gitlab-runner:instancelifecycle" = "spot:no"
   }
 
-  runners_idle_count = var.runners_idle_count
-  runners_off_peak_timezone   = var.timezone
-  runners_off_peak_idle_count = 0
-  runners_off_peak_idle_time  = 60
-
-  runners_privileged         = "true"
-  runners_additional_volumes = ["/certs/client"]
-
   runners_volumes_tmpfs = [
     { "/var/opt/cache" = "rw,noexec" },
   ]
@@ -76,8 +79,6 @@ module "gitlab-runner" {
   runners_services_volumes_tmpfs = [
     { "/var/lib/mysql" = "rw,noexec" },
   ]
-
-  runners_off_peak_periods = var.runners_off_peak_periods
 }
 
 resource "aws_iam_service_linked_role" "ci-runner-role" {
