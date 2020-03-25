@@ -96,5 +96,5 @@ resource "aws_iam_policy" "docker_cache_access" {
   path        = "/"
   description = "Policy for docker machine instance to access cache"
 
-  policy = data.template_file.docker_machine_cache_policy.rendered
+  policy = data.template_file.docker_cache_policy.rendered
 }
