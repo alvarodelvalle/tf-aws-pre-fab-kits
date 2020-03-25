@@ -48,7 +48,7 @@ module "gitlab-runner" {
   runners_request_spot_instance = false
   runners_privileged            = "true"
   runners_additional_volumes    = ["/certs/client"]
-  runners_environment_vars      = ["AWS_REGION=us-east-1", "credsStore=ecr-login", "AWS_SDK_LOAD_CONFIG=true"]
+  runners_environment_vars      = ["DOCKER_AUTH_CONFIG={\"credsStore\":\"ecr-login\"}","AWS_REGION=us-east-1", "AWS_SDK_LOAD_CONFIG=true"]
   runners_off_peak_periods      = var.runners_off_peak_periods
   userdata_post_install         = "sudo yum install -y amazon-ecr-credential-helper"
 
